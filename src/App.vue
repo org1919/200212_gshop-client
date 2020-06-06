@@ -9,11 +9,17 @@
 <script>
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { reqCategorys } from "./api";
 export default {
   name: "App",
   components: {
     Header,
     Footer
+  },
+
+  async mounted() {
+    const result = await reqCategorys();
+    console.log("result", result);
   }
 };
 </script>
