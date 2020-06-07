@@ -63,12 +63,12 @@ export default {
         location.query = { keyword2: keyword.toUpperCase() };
       }
 
-      //   this.$router.push(location);
+      this.$router.push(location);
 
       // 使用的是vue-router3.1.0的语法(内部不会抛出错误的promise)
-      this.$router.push(location, () => {
-        console.log("跳转成功的回调");
-      });
+      // this.$router.push(location, () => {
+      //   console.log("跳转成功的回调");
+      // });
 
       // 使用的是vue-router新的语法, 返回的是promise
       //   this.$router.push(location).catch(() => {
