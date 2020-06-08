@@ -60,9 +60,8 @@ export default {
       };
       if (keyword) {
         location.params = { keyword: keyword };
-        location.query = { keyword2: keyword.toUpperCase() };
       }
-
+      location.query = this.$route.query;
       this.$router.push(location);
 
       // 使用的是vue-router3.1.0的语法(内部不会抛出错误的promise)

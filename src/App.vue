@@ -9,7 +9,7 @@
 <script>
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { reqCategoryList } from "./api";
+// import { reqCategoryList, reqFloors } from "./api";
 export default {
   name: "App",
   components: {
@@ -18,8 +18,14 @@ export default {
   },
 
   async mounted() {
-    const result = await reqCategoryList();
-    console.log("result", result.data);
+    // const result = await reqCategoryList();
+    // console.log("result", result.data);
+
+    // const result = await reqFloors();
+    // console.log("result---", result);
+    this.$store.dispatch("getCategoryList");
+    // this.$store.dispatch("getBanners"); 测试
+    // this.$store.dispatch("getFloors");
   }
 };
 </script>

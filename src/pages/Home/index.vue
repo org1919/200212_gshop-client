@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TypeNav from "../../components/TypeNav/index";
+// import TypeNav from "../../components/TypeNav/index";
 import ListContainer from "./ListContainer/ListContainer";
 import TodayRecommend from "./TodayRecommend/TodayRecommend";
 import Rank from "./Rank/Rank";
@@ -25,7 +25,7 @@ export default {
 
   // 局部注册组件 (就当前组件使用)
   components: {
-    TypeNav,
+    // TypeNav,
     ListContainer,
     TodayRecommend,
     Rank,

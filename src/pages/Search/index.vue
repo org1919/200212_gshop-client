@@ -1,8 +1,13 @@
 <template>
   <div>
+    <TypeNav />
     <h2>Search</h2>
     <h2>keyword:{{$route.params.keyword}}</h2>
     <h2>keyword:{{$route.query.keyword2}}</h2>
+    <h3>categoryName: {{$route.query.categoryName}}</h3>
+    <h3>category1Id: {{$route.query.category1Id}}</h3>
+    <h3>category2Id: {{$route.query.category2Id}}</h3>
+    <h3>category3Id: {{$route.query.category3Id}}</h3>
   </div>
 </template>
 
