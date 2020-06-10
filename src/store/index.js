@@ -5,7 +5,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-console.log(modules);
 
 // 声明使用vue插件
 Vue.use(Vuex)

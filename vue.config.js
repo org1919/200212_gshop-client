@@ -1,5 +1,5 @@
 module.exports = {
-    lintOnSave: false,
+    lintOnSave: "warning",
     devServer: {
         proxy: {
             '/api': { // 只对请求路由以/api开头的请求进行代理转发

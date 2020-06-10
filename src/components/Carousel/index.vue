@@ -43,7 +43,7 @@ export default {
         // 如果还没有数据, 直接结束
         if (this.carouselList.length === 0) return;
 
-        console.log("carouselList---", value);
+        // console.log("carouselList---", value);
         // 利用nexTick()延迟到界面更新之后才去创建swiper对象
         this.$nextTick(() => {
           this.initSwiper();
@@ -57,7 +57,7 @@ export default {
   在初始界面显示之后执行
   */
   mounted() {
-    console.log("++++", this.carouselList.length);
+    // console.log("++++", this.carouselList.length);
     // 如果初始时已经有数据了, 就创建一个对应的swiper对象
     if (this.carouselList.length > 0) {
       // 已经显示了
@@ -98,7 +98,7 @@ export default {
     初始化创建swiper对象
     */
     initSwiper() {
-      console.log("创建swiper对象");
+      // console.log("创建swiper对象");
       new Swiper(this.$refs.swiper, {
         // direction: 'horizontal', // 水平切换, 默认就是这个值
 

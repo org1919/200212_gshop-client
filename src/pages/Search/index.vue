@@ -11,32 +11,44 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">
-              iphone
-              <i>×</i>
+            <li class="with-x" v-if="options.categoryName">
+              {{options.categoryName}}
+              <i @click="removeCategory">×</i>
             </li>
-            <li class="with-x">
-              华为
-              <i>×</i>
+            <li class="with-x" v-if="options.keyword">
+              {{options.keyword}}
+              <i @click="removeKeyword">×</i>
             </li>
-            <li class="with-x">
-              OPPO
-              <i>×</i>
+
+            <li class="with-x" v-if="options.trademark">
+              {{options.trademark}}
+              <i @click="removeTrademark">×</i>
+            </li>
+
+            <li class="with-x" v-for="(prop,index) in options.props" :key="prop">
+              {{prop}}
+              <i @click="removeProp(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :setTrademark="setTrademark" @addProp="addProp" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active:options.order.indexOf('1') === 0}">
+                  <a href="#">
+                    综合
+                    <i
+                      class="iconfont iconup"
+                      v-if="options.order.indexOf('1') === 0"
+                      :class="iconClass"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -47,11 +59,15 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:options.order.indexOf('2') === 0}">
+                  <a href="#">
+                    价格
+                    <i
+                      class="iconfont iconup"
+                      v-if="options.order.indexOf('2') === 0"
+                      :class="iconClass"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -93,39 +109,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted">
-                  <span>...</span>
-                </li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div>
-                <span>共10页&nbsp;</span>
-              </div>
-            </div>
-          </div>
+
+          <Pagination
+            :currentPage="options.pageNo"
+            :pageSize="options.pageSize"
+            :total="productList.total"
+            :showPageNo="5"
+            @currentChange="getProductList"
+          />
         </div>
       </div>
     </div>
@@ -162,17 +153,91 @@ export default {
     常用的就是在mounted()/create()发ajax请求
     */
   created() {
+    this.updateOptions();
+
     this.getProductList();
   },
 
   computed: {
     ...mapState({
       productList: state => state.search.productList
-    })
+    }),
+    iconClass() {
+      this.options.order.split(":")[1] === "asc" ? "iconup" : " icondown";
+    }
+  },
+
+  watch: {
+    // 监视路由参数的变化
+    $route(to, from) {
+      this.updateOptions();
+
+      this.getProductList();
+    }
   },
 
   methods: {
-    getProductList() {
+    removeProp(index) {
+      this.options.props.splice(index, 1);
+      this.getProductList();
+    },
+    addProp(prop) {
+      if (this.options.props.indexOf(prop) >= 0) return;
+      this.options.props.push(prop);
+      this.getProductList();
+    },
+
+    removeTrademark() {
+      this.options.trademark = "";
+      this.getProductList();
+    },
+
+    setTrademark(trademark) {
+      if (this.options.trademark === trademark) return;
+
+      this.options.trademark = trademark;
+      this.getProductList();
+    },
+    removeCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+
+      // this.getProductList();
+      this.$router.replace({ name: "search", params: this.$route.params });
+    },
+    removeKeyword() {
+      this.options.keyword = "";
+      // this.getProductList();
+      this.$router.replace({ name: "search", query: this.$route.query });
+      this.$bus.$emit("clearText");
+    },
+
+    updateOptions() {
+      //取参数数据
+      const {
+        categoryName = "",
+        category1Id = "",
+        category2Id = "",
+        category3Id = ""
+      } = this.$route.query;
+
+      const { keyword = "" } = this.$route.params;
+
+      this.options = {
+        ...this.options,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+        keyword
+      };
+    },
+
+    // 获取指定页码的商品列表
+    getProductList(pageNo = 1) {
+      this.options.pageNo = pageNo; //更新页码
       this.$store.dispatch("getProductList", this.options);
     }
   },
