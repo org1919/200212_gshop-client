@@ -40,14 +40,10 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{active:options.order.indexOf('1') === 0}">
+                <li :class="{active: isActive('1')} " @click="setOrder('1')">
                   <a href="#">
                     综合
-                    <i
-                      class="iconfont iconup"
-                      v-if="options.order.indexOf('1') === 0"
-                      :class="iconClass"
-                    ></i>
+                    <i class="iconfont iconup" v-if="isActive('1')" :class="iconClass"></i>
                   </a>
                 </li>
                 <li>
@@ -59,14 +55,10 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li :class="{active:options.order.indexOf('2') === 0}">
+                <li :class="{active:isActive('2')}" @click="setOrder('2')">
                   <a href="#">
                     价格
-                    <i
-                      class="iconfont iconup"
-                      v-if="options.order.indexOf('2') === 0"
-                      :class="iconClass"
-                    ></i>
+                    <i class="iconfont iconup" v-if="isActive('2')" :class="iconClass"></i>
                   </a>
                 </li>
               </ul>
@@ -110,6 +102,7 @@
             </ul>
           </div>
 
+          <!-- 分页组件引入 -->
           <Pagination
             :currentPage="options.pageNo"
             :pageSize="options.pageSize"
@@ -140,11 +133,11 @@ export default {
         keyword: "", // 搜索关键字
 
         props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] ["2:6.0～6.24英寸:屏幕尺寸"]
-        trademark: "", // 品牌: "ID:品牌名称" "1:苹果"
+        //trademark: "", // 品牌: "ID:品牌名称" "1:苹果"
         order: "1:desc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  "1:desc"
 
         pageNo: 1, // 页码
-        pageSize: 5 //	每页数量
+        pageSize: 2 //	每页数量
       }
     };
   },
@@ -163,7 +156,9 @@ export default {
       productList: state => state.search.productList
     }),
     iconClass() {
-      this.options.order.split(":")[1] === "asc" ? "iconup" : " icondown";
+      return this.options.order.split(":")[1] === "asc"
+        ? "iconup"
+        : " icondown";
     }
   },
 
@@ -176,7 +171,24 @@ export default {
     }
   },
 
+  // 方法
   methods: {
+    setOrder(flag) {
+      let [orderFlag, orderType] = this.options.order.split(":"); //[orderflag]  [ordertype]
+      if (flag === orderFlag) {
+        orderType = orderType === "asc" ? "desc" : "asc";
+      } else {
+        orderFlag = flag;
+        orderType = "desc";
+      }
+      this.options.order = orderFlag + ":" + orderType;
+      this.getProductList();
+    },
+
+    isActive(orderFlag) {
+      return this.options.order.indexOf(orderFlag) === 0;
+    },
+
     removeProp(index) {
       this.options.props.splice(index, 1);
       this.getProductList();
@@ -188,14 +200,17 @@ export default {
     },
 
     removeTrademark() {
-      this.options.trademark = "";
+      // this.options.trademark = "";
+      // delete this.options.trademark;
+      this.$delete(this.options, "trademark");
       this.getProductList();
     },
-
+    //设置品牌属性
     setTrademark(trademark) {
       if (this.options.trademark === trademark) return;
 
-      this.options.trademark = trademark;
+      this.$set(this.options, "trademark", trademark);
+      // this.options.trademark = trademark;
       this.getProductList();
     },
     removeCategory() {
@@ -209,7 +224,7 @@ export default {
     },
     removeKeyword() {
       this.options.keyword = "";
-      // this.getProductList();
+      this.getProductList();
       this.$router.replace({ name: "search", query: this.$route.query });
       this.$bus.$emit("clearText");
     },
