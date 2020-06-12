@@ -32,9 +32,11 @@
       </h1>
 
       <div class="searchArea">
-        <form action="###" class="searchForm">
+        <form action="###" class="searchForm" @submit.prevent="search">
           <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="search">搜索</button>
+          <!-- type="button" -->
+          <!-- <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">搜索</button> -->
+          <button class="sui-btn btn-xlarge btn-danger">搜索</button>
         </form>
       </div>
     </div>
@@ -58,7 +60,7 @@ export default {
   methods: {
     search() {
       const { keyword } = this;
-      //   this.$router.push(`/search/${keyword}?keyword2=${keyword.toUpperCase()}`)
+
       const location = {
         name: "search"
       };
@@ -72,16 +74,6 @@ export default {
       } else {
         this.$router.push(location);
       }
-
-      // 使用的是vue-router3.1.0的语法(内部不会抛出错误的promise)
-      // this.$router.push(location, () => {
-      //   console.log("跳转成功的回调");
-      // });
-
-      // 使用的是vue-router新的语法, 返回的是promise
-      //   this.$router.push(location).catch(() => {
-      //     console.log("出错啦");
-      //   });
     }
   }
 };

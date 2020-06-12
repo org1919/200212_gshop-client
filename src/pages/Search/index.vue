@@ -70,18 +70,22 @@
               <li class="yui3-u-1-5" v-for=" item in productList.goodsList" :key="item.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:">
+                    <router-link :to="'/detail/'+item.id">
                       <img :src="item.defaultImg" />
-                    </a>
+                    </router-link>
+                    <!-- <a href="javascript:">
+                      <img :src="item.defaultImg" />
+                    </a>-->
                   </div>
                   <div class="price">
                     <strong>
-                      <em>¥</em>
+                      <em>¥</em>&nbsp;
                       <i>{{item.price}}</i>
                     </strong>
                   </div>
                   <div class="attr">
-                    <a href="javascript:">{{item.title}}</a>
+                    <router-link :to="'/detail/'+item.id">{{item.title}}</router-link>
+                    <!-- <a href="javascript:">{{item.title}}</a> -->
                   </div>
                   <div class="commit">
                     <i class="command">

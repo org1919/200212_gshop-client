@@ -2,6 +2,7 @@ import Home from '@/pages/Home'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import Search from '../pages/Search'
+import Detail from '@/pages/Detail'
 
 export default [
     {
@@ -27,4 +28,8 @@ export default [
         component: Search,
         name: 'search' //一旦有params参数, 想用push()的对象语法, 必须有name配置
     },
+    {
+        path: '/detail/:id',
+        component: Detail
+    }
 ]
