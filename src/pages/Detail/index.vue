@@ -87,12 +87,12 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum = skuNum*1+ 1">+</a>
+                <a href="javascript:" class="mins" @click="skuNum = skuNum > 1?skuNum-1:skuNum">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -339,7 +339,8 @@ export default {
   name: "Detail",
   data() {
     return {
-      currentIndex: 0
+      currentIndex: 0, //当前要显示图片的下标
+      skuNum: 1 //商品的数量
     };
   },
   computed: {
@@ -362,6 +363,61 @@ export default {
         item.isChecked = "0";
       });
       arr[index].isChecked = "1";
+    },
+
+    //添加到购物车
+    async addToCart() {
+      const skuNum = this.skuNum;
+      const skuId = this.$route.params.id;
+      //收集数据
+      // this.$store.dispatch("addToCart", {
+      //   skuNum,
+      //   skuId,
+      //   callback: this.callback
+      // });
+
+      //方式二
+      // const promise = this.$store.dispatch("addToCart2", {
+      //   skuNum,
+      //   skuId: undefined
+      // });
+      // console.log(promise);
+      // promise
+      //   .then(() => {
+      //     this.$router.push("/addcartsuccess");
+      //   })
+      //   .catch(error => {
+      //     alert(error.message);
+      //   });
+
+      // try {
+      //   await this.$store.dispatch("addToCart2", {
+      //     skuNum,
+      //     skuId
+      //   });
+      //   this.$router.push("/addcartsuccess");
+      // } catch (error) {
+      //   alert(error.message);
+      // }
+
+      const errorMsg = await this.$store.dispatch("addToCart3", {
+        skuNum,
+        skuId
+      });
+      if (errorMsg) {
+        alert(errorMsg);
+      } else {
+        sessionStorage.setItem("SKU_INFO_KEY", JSON.stringify(this.skuInfo));
+        this.$router.push({ path: "/addcartsuccess", query: { skuNum } });
+      }
+    },
+    //在异步action执行
+    callback(errorMsg) {
+      if (errorMsg) {
+        alert(errorMsg);
+      } else {
+        this.$router.push("/addcartsuccess");
+      }
     }
   },
 
