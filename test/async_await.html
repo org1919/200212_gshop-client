@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" value="1"
+        οnkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+        onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" />
+    <script crossorigin="anonymous" src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+    <script>
+
+        function fn() {
+            return axios.get('http://182.92.128.115/api/product/getBaseCategoryList')
+        }
+        console.log(fn());
+        // fn().then()
+        async function fn2() {
+            try {
+                const response = await fn()
+                // return response.data
+                // return Promise.reject('faild---003')
+                return Promise.resolve('success---003')
+            } catch (error) {
+                throw error.message
+            }
+        }
+
+        function fn3() {
+            const promise = fn2()
+            console.log('fn3()', promise);
+        }
+
+        fn3()
+    </script>
+</body>
+
+</html>

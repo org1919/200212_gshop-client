@@ -6,22 +6,8 @@
 */
 import ajax from './ajax'
 import mockAjax from './mockAjax'
-/*
-登录
-/api/user/passport/login
-*/
-export function reqLogin(mobile, password) {
-    // 将ajax作为函数使用
-    // return ajax({
-    //     method: "POST",
-    //     url: '/user/passport/login',
-    //     data: { mobile, password }
-    // })
-    // 将ajax作为对象使用
 
-    return ajax.post("/user/passport/login", { mobile, password })
-}
-
+// const reqLogin = (mobile, password) => ajax.post("/user/passport/login", { mobile, password })
 
 
 /*
@@ -57,7 +43,7 @@ export const reqDetailInfo = (skuId) => ajax.get(`/item/${skuId}`)
 export const reqShopCart = () => ajax.get(`/cart/cartList`)
 
 /* 
-添加到购物车(对已有物品进行数量改动)
+添加到购物车(对已有物 品进行数量改动)
 skuId: 商品ID
 skuNum: 商品数量, 正数代表增加, 负数代表减少
 /api/cart/addToCart/{ skuId }/{ skuNum } POST
@@ -70,7 +56,7 @@ skuId: 商品的ID
 isChecked: 商品选中状态, '0'代表不选中, '1'代表选中
 /api/cart/checkCart/{skuId}/{isChecked} GET
 */
-export const reqCheckChartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart/${skuId}/${isChecked}`)
+export const reqCheckCartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart/${skuId}/${isChecked}`)
 
 /* 
 删除购物项商品
@@ -78,3 +64,57 @@ export const reqCheckChartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart
 */
 export const reqDeleteCartItem = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
 
+/*
+登录
+/api/user/passport/login
+*/
+export function reqLogin(mobile, password) {
+    // 将ajax作为函数使用
+    // return ajax({
+    //     method: "POST",
+    //     url: '/user/passport/login',
+    //     data: { mobile, password }
+    // })
+    // 将ajax作为对象使用
+
+    return ajax.post("/user/passport/login", { mobile, password })
+}
+
+//注册用户
+//     / api / user / passport / register POST
+// userInfo: 包含以下属性的对象
+// mobile
+// password
+// code
+
+export const reqRegister = (userInfo) => ajax.post('/user/passport/register', userInfo)
+
+/* 
+退出登陆
+/api/user/passport/logout GET
+*/
+export const reqLogout = () => ajax('/user/passport/logout')
+
+// 获取订单列表
+export const reqOrders = (page, limit) => ajax(`/order/auth/${page}/${limit}`)
+
+//获取订单交易页信息
+export const reqTradeInfo = () => ajax('/order/auth/trade')
+
+// 提交订单
+// /api/order/auth/submitOrder?tradeNo={tradeNo}
+// orderInfo 包含要提交订单相关信息的对象
+export const reqSubmitOrder = (tradeNo, orderInfo) => ajax({
+    url: '/order/auth/submitOrder',
+    method: 'POST',
+    // query: { tradeNo },
+    params: { tradeNo },// 指定query参数
+    data: orderInfo
+})
+
+
+// 获取订单支付相关
+export const reqPayInfo = (orderId) => ajax(`/payment/weixin/createNative/${orderId}`)
+
+// 查询订单支付状态
+export const reqPayStatus = (orderId) => ajax(`/payment/weixin/queryPayStatus/${orderId}`)

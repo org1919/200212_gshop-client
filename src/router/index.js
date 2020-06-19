@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import stote from '@/store'
 // 声明使用vue插件
 Vue.use(VueRouter)
 
@@ -51,11 +52,8 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
 }
 
 
-
-
-
 // 向外暴露路由器对象
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",// 不带#
     routes,
     // 滚动条回到最上面
@@ -64,3 +62,24 @@ export default new VueRouter({
         return { x: 0, y: 0 }
     }
 })
+
+// 全局守卫
+const checkPaths = ['/trade', '/pay', '/center']
+router.beforeEach((to, from, next) => {
+    const targetPath = to.path
+    const needCheck = !!checkPaths.find(path => {
+        return targetPath.indexOf(path) === 0
+    })
+    if (needCheck) {
+        const token = stote.state.user.userInfo.token
+        if (token) {
+            next()
+        } else {
+            next('/login?redirect=' + targetPath)
+        }
+    } else {
+        next()
+    }
+
+}) // 监视的回调函数
+export default router

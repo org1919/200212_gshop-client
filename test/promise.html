@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // new Promise((resolve, reject) => {
+        //     // setTimeout(() => {
+        //     //     resolve('success---value')
+        //     // }, 1000)
+
+        //     setTimeout(() => {
+        //         reject('fail---reason')
+        //     }, 1000)
+        // })
+        //     .then(value => {
+        //         console.log(value);
+
+        //     }, reason => {
+        //         console.log(reason);
+        //         return Promise.reject('fail----002')
+        //     })
+        //     .then(value => {
+        //         console.log(value);
+
+        //     }, reason => {
+        //         console.log(reason);
+
+        //     })
+
+        // const p1 = Promise.resolve(1)
+        // const p2 = Promise.resolve(2)
+        // const p3 = Promise.reject(3)
+        // const p4 = Promise.reject(4)
+
+        // const p5 = Promise.all([p1, p2])
+        // const p6 = Promise.all([p1, p4, p3])
+        // console.log(p5);
+        // console.log(p6);
+        let jsj = {
+            value: 0,
+            // add: values => {
+            //     console.log(this);
+            // },
+            add(value) {
+                console.log(this);
+
+            }
+        }
+        console.log(jsj.value);
+        jsj.add()
+
+    </script>
+</body>
+
+</html>
